@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>React routing</title>
+</head>
+<body>
+<div id="app"></div>
+
+<script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+	const Router = ReactRouterDOM.BrowserRouter;
+	const Route = ReactRouterDOM.Route;
+	const Switch = ReactRouterDOM.Switch;
+
+	class About extends React.Component {
+		render()
+		{
+			return <h2>О сайте</h2>;
+		}
+	}
+
+	class NotFound extends React.Component {
+		render()
+		{
+			return <h2>Ресурс не найден</h2>;
+		}
+	}
+
+	class Main extends React.Component {
+		render()
+		{
+			return <h2>Главная</h2>;
+		}
+	}
+
+	ReactDOM.render(
+		<Router>
+			<Switch>
+				<Route exact path="/" component={Main}/>
+				<Route strict path="/about/" children={() => <h2>About</h2>}/>
+				<Route path="/contact" children={() => <h2>Contact</h2>}/>
+				<Route component={NotFound}/>
+			</Switch>
+		</Router>,
+		document.getElementById('app')
+	)
+</script>
+</body>
+</html>
