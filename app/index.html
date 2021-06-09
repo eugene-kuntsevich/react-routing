@@ -2,7 +2,17 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<title>React routing</title>
+	<title>Маршруты в React</title>
+	<style>
+      a {
+          margin: 5px;
+      }
+
+      .active {
+          color: red;
+          font-weight: bold;
+      }
+	</style>
 </head>
 <body>
 <div id="app"></div>
@@ -16,6 +26,14 @@
 	const Router = ReactRouterDOM.BrowserRouter;
 	const Route = ReactRouterDOM.Route;
 	const Switch = ReactRouterDOM.Switch;
+	const NavLink = ReactRouterDOM.NavLink;
+
+	class Home extends React.Component {
+		render()
+		{
+			return <h2>Главная</h2>;
+		}
+	}
 
 	class About extends React.Component {
 		render()
@@ -31,21 +49,37 @@
 		}
 	}
 
-	class Main extends React.Component {
+	class Products extends React.Component {
 		render()
 		{
-			return <h2>Главная</h2>;
+			return <div>
+				<h2>Товары</h2>
+			</div>;
+		}
+	}
+
+	class Nav extends React.Component {
+		render()
+		{
+			return <nav>
+				<NavLink exact to="/" activeClassName="active">Главная</NavLink>
+				<NavLink to="/about" activeClassName="active">О сайте</NavLink>
+				<NavLink to="/products" activeClassName="active">Товары</NavLink>
+			</nav>;
 		}
 	}
 
 	ReactDOM.render(
 		<Router>
-			<Switch>
-				<Route exact path="/" component={Main}/>
-				<Route strict path="/about/" children={() => <h2>About</h2>}/>
-				<Route path="/contact" children={() => <h2>Contact</h2>}/>
-				<Route component={NotFound}/>
-			</Switch>
+			<div>
+				<Nav/>
+				<Switch>
+					<Route exact path="/" component={Home}/>
+					<Route path="/about" component={About}/>
+					<Route path="/products" component={Products}/>
+					<Route component={NotFound}/>
+				</Switch>
+			</div>
 		</Router>,
 		document.getElementById('app')
 	)
