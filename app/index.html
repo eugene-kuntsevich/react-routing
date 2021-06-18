@@ -1,18 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8"/>
-	<title>Маршруты в React</title>
-	<style>
-      a {
-          margin: 5px;
-      }
-
-      .active {
-          color: red;
-          font-weight: bold;
-      }
-	</style>
+  <meta charset="utf-8"/>
+  <title>Маршруты в React</title>
 </head>
 <body>
 <div id="app"></div>
@@ -23,66 +13,93 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 <script type="text/babel">
-	const Router = ReactRouterDOM.BrowserRouter;
-	const Route = ReactRouterDOM.Route;
-	const Switch = ReactRouterDOM.Switch;
-	const NavLink = ReactRouterDOM.NavLink;
+  const Router = ReactRouterDOM.BrowserRouter;
+  const Route = ReactRouterDOM.Route;
+  const Switch = ReactRouterDOM.Switch;
+  const NavLink = ReactRouterDOM.NavLink;
+  const phones = [
+    {id: 1, name: "Apple iPhone 12 Pro"},
+    {id: 2, name: "Google Pixel 5"},
+    {id: 3, name: "Huawei P40 Pro"}
+  ];
 
-	class Home extends React.Component {
-		render()
-		{
-			return <h2>Главная</h2>;
-		}
-	}
+  class Home extends React.Component {
+    render() {
+      return <h2>Главная</h2>;
+    }
+  }
 
-	class About extends React.Component {
-		render()
-		{
-			return <h2>О сайте</h2>;
-		}
-	}
+  class About extends React.Component {
+    render() {
+      return <h2>О сайте</h2>;
+    }
+  }
 
-	class NotFound extends React.Component {
-		render()
-		{
-			return <h2>Ресурс не найден</h2>;
-		}
-	}
+  class NotFound extends React.Component {
+    render() {
+      return <h2>Ресурс не найден</h2>;
+    }
+  }
 
-	class Products extends React.Component {
-		render()
-		{
-			return <div>
-				<h2>Товары</h2>
-			</div>;
-		}
-	}
+  class ProductsList extends React.Component {
+    render() {
+      return <div>
+        <h2>Список товаров</h2>
+        <ul>
+          {
+            phones.map(function (item) {
+              return <li key={item.id}>
+                <NavLink to={`/products/${item.id}`}>{item.name}</NavLink>
+              </li>
+            })
+          }
+        </ul>
+      </div>;
+    }
+  }
 
-	class Nav extends React.Component {
-		render()
-		{
-			return <nav>
-				<NavLink exact to="/" activeClassName="active">Главная</NavLink>
-				<NavLink to="/about" activeClassName="active">О сайте</NavLink>
-				<NavLink to="/products" activeClassName="active">Товары</NavLink>
-			</nav>;
-		}
-	}
+  class Product extends React.Component {
+    render() {
+      const prodId = this.props.match.params.id;
+      let phone;
+      for (var i = 0; i < phones.length; i++) {
+        if (phones[i].id === prodId) {
+          phone = phones[i];
+          break;
+        }
+      }
+      if (phone === undefined) {
+        return <h2>Товар не найден</h2>;
+      } else {
+        return <h2>Товар {phone.name}</h2>;
+      }
+    }
+  }
 
-	ReactDOM.render(
-		<Router>
-			<div>
-				<Nav/>
-				<Switch>
-					<Route exact path="/" component={Home}/>
-					<Route path="/about" component={About}/>
-					<Route path="/products" component={Products}/>
-					<Route component={NotFound}/>
-				</Switch>
-			</div>
-		</Router>,
-		document.getElementById('app')
-	)
+  class Products extends React.Component {
+    render() {
+      return <div>
+        <Switch>
+          <Route exact path="/products" component={ProductsList}/>
+          <Route path="/products/:id" component={Product}/>
+        </Switch>
+      </div>;
+    }
+  }
+
+  ReactDOM.render(
+      <Router>
+        <div>
+          <Switch>
+            <Route exact path="/" component={Home}/>
+            <Route path="/about" component={About}/>
+            <Route path="/products" component={Products}/>
+            <Route component={NotFound}/>
+          </Switch>
+        </div>
+      </Router>,
+      document.getElementById("app")
+  )
 </script>
 </body>
 </html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Маршруты в React</title>
+</head>
+<body>
+<div id="app"></div>
+
+<script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/react-router/umd/react-router.min.js"></script>
+<script src="https://unpkg.com/react-router-dom/umd/react-router-dom.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+  const Router = ReactRouterDOM.BrowserRouter;
+  const Route = ReactRouterDOM.Route;
+  const Switch = ReactRouterDOM.Switch;
+  const Link = ReactRouterDOM.Link;
+  const Redirect = ReactRouterDOM.Redirect;
+
+  class Home extends React.Component {
+    render() {
+      return <h2>Главная</h2>;
+    }
+  }
+
+  class New extends React.Component {
+    render() {
+      return <h2>New {this.props.match.params.id}</h2>;
+    }
+  }
+
+  class Old extends React.Component {
+    render() {
+      return <Redirect to={`/new/${this.props.match.params.id}`}/>;
+    }
+  }
+
+  ReactDOM.render(
+      <Router>
+        <div>
+          <nav>
+            <Link to="/">Home</Link> |
+            <Link to="/old/123">Old</Link> |
+            <Link to="/new/456">New</Link>
+          </nav>
+          <Switch>
+            <Route exact path="/" component={Home}/>
+            <Route path="/new/:id" component={New}/>
+            <Route path="/old/:id" component={Old}/>
+          </Switch>
+        </div>
+      </Router>,
+      document.getElementById("app")
+  )
+</script>
+</body>
+</html>
